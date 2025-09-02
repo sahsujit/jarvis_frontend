@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { userDataContext } from '../context/UserContext'
 
 const Card = ({image}) => {
+  const {setSelectedImage, selectedImage} = useContext(userDataContext)
   return (
-    <div className=' w-[70px] h-[140px] lg:w-[150px] lg:h-[250px] cursor-pointer bg-[#030326] border-2 border-[#0000ff66]  hover:shadow-2xl hover:shadow-blue-950 hover:border-4 hover:border-white hover:scale-110  transition-all duration-200 rounded-2xl overflow-hidden'>
+    <div className={`w-[70px] h-[140px] lg:w-[150px] lg:h-[250px] cursor-pointer
+     bg-[#030326] border-2 border-[#0000ff66]  hover:shadow-2xl
+      hover:shadow-blue-950 hover:border-4 hover:border-white hover:scale-110  
+      transition-all duration-200 rounded-2xl overflow-hidden 
+      ${selectedImage ==image ? "shadow-2xl shadow-blue-950 border-4 border-white scale-110" : null}`}
+      onClick={()=>setSelectedImage(image)}>
         <img src={image} alt="" className='h-full w-full object-cover' />
 
     </div>
