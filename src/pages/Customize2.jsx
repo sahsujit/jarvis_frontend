@@ -1,16 +1,58 @@
 import React, { useContext, useState } from "react";
 import { userDataContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { MdKeyboardBackspace } from "react-icons/md";
 
 export const Customize2 = () => {
-    const {userData}= useContext(userDataContext)
-    const [AssistantName,setAssistantName]=useState(userData?.AssistantName || "")
-    const navigate = useNavigate()
+  const { userData, backendImage, selectedImage, serverUrl, setUserData } =
+    useContext(userDataContext);
+  const [loading, setLoading] = useState(false);
+  const [assistantName, setAssistantName] = useState(
+    userData?.assistantName || ""
+  );
+  const navigate = useNavigate();
+
+  const handleUpdateAssistant = async () => {
+     setLoading(true);
+    try {
+     
+
+      let formData = new FormData();
+      formData.append("assistantName", assistantName);
+      if (backendImage) {
+        formData.append("assistantImage", backendImage);
+      } else {
+        formData.append("imageUrl", selectedImage);
+      }
+
+      const result = await axios.post(
+        `${serverUrl}/api/user/update`,
+        formData,
+        { withCredentials: true }
+      );
+      console.log(result);
+      setUserData(result.data.user);
+
+      setLoading(false);
+      navigate("/");
+
+      
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       className="w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353] 
-    flex flex-col items-center justify-center p-[20px]"
+    flex flex-col items-center justify-center p-[20px] relative"
     >
+      <MdKeyboardBackspace
+        className="absolute w-[25px] h-[25px] top-[30px] left-[30px] text-white cursor-pointer"
+        onClick={() => navigate("/customize")}
+      />
       <h1 className="text-white text-[30px] mb-[40px] text-center">
         Enter Your <span className="text-blue-200">Assistant Name</span>
       </h1>
@@ -19,23 +61,24 @@ export const Customize2 = () => {
         type="text"
         placeholder="eg. Jarvis"
         required
-
-        value={AssistantName}
+        value={assistantName}
         onChange={(e) => setAssistantName(e.target.value)}
         className="w-full max-w-[600px] h-[60px] outline-none border-2 px-[20px] py-[10px] text-[18px] rounded-2xl border-white bg-transparent placeholder-gray-300 text-white"
       />
 
-      {AssistantName && (
+      {assistantName && (
         <button
           type="submit"
           className="min-w-[300px] cursor-pointer h-[60px] mt-[30px]  text-[19px] rounded-2xl  bg-white  text-black font-semibold"
-          onClick={() => navigate("")}
+          onClick={() => {
+            handleUpdateAssistant();
+            
+          }}
+          disabled={loading}
         >
-          Finally Create Your Assistant
+          {loading ? "Loading..." : "Finally Create Your Assistant"}
         </button>
       )}
-
-     
     </div>
   );
 };

@@ -10,6 +10,7 @@ import image6 from "../assets/image6.jpeg";
 import image7 from "../assets/image7.jpeg";
 import Card from "../components/Card";
 import { userDataContext } from "../context/UserContext";
+import { MdKeyboardBackspace } from "react-icons/md";
 
 const Customize = () => {
   const {
@@ -31,11 +32,18 @@ const Customize = () => {
     setBackendImage(file)
     setFrontendImage(URL.createObjectURL(file))
   }
+
+
+
   return (
     <div
       className="w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353] 
-    flex flex-col items-center justify-center p-[20px]"
+    flex flex-col items-center justify-center p-[20px] relative"
     >
+        <MdKeyboardBackspace
+              className="absolute w-[25px] h-[25px] top-[30px] left-[30px] text-white cursor-pointer"
+              onClick={() => navigate("/")}
+            />
       <h1 className="text-white text-[30px] mb-[40px] text-center">
         Select Your <span className="text-blue-200">Assistant Image</span>
       </h1>
