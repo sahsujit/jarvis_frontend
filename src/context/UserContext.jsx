@@ -9,7 +9,7 @@ import axios from "axios";
 export const userDataContext = createContext();
 
 const UserContext = ({ children }) => {
-  const serverUrl = "http://localhost:8000";
+  const serverUrl = "https://jarvis-backend-or8d.onrender.com";
 
   // Load user from localStorage first
   const [userData, setUserData] = useState(() => {
